@@ -65,23 +65,13 @@ class Recipe:
 
             nested_index = ".".join(map(str, nested_path))
             
-            component_type = "T" if component is self.trigger else component.name
-            
-            input_schema_str = _format_schema(component.input_schema)
-            output_schema_str = _format_schema(component.output_schema)
-            
-            print(f"({current_global}) {nested_index}: {component_type} "
-                  f"(input_schema={input_schema_str}, output_schema={output_schema_str})")
+            print(f"({current_global}) {nested_index}: {component.name} "
+                  f"(input_schema={component.input_schema}, output_schema={component.output_schema})")
 
             children = component.get_children()
             for i, child in enumerate(children, 1):
                 child_path = nested_path + [i]
                 _traverse_component(child, global_counter, child_path)
-        
-        def _format_schema(schema: Schema) -> str:
-            """Format schema dictionary for display."""
-            field_strs = [f"{name}: {type_.__name__}" for name, type_ in schema.items()]
-            return "{" + ", ".join(field_strs) + "}"
         
         print(f"Recipe: {self.name}")
         
